@@ -8,6 +8,17 @@ COPY /docker-conf-files/fpm.conf /etc/php/8.1/fpm/pool.d/processmaker.conf
 COPY /docker-conf-files/custom.ini /etc/php/8.1/fpm/conf.d/
 WORKDIR /opt/processmaker
 COPY --chown=www-data:www-data . .
-EXPOSE 80
-# CMD ["service", "nginx", "start"]
-# CMD ["service", "php7.4-fpm", "start"]
+
+COPY entrypoint.sh ./
+
+# Start and enable SSH
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends dialog \
+    && apt-get install -y --no-install-recommends openssh-server \
+    && echo "root:Docker!" | chpasswd \
+    && chmod u+x ./entrypoint.sh
+COPY sshd_config /etc/ssh/
+
+ENTRYPOINT [ "./entrypoint.sh" ]
+
+EXPOSE 80 2222

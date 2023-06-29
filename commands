@@ -1,0 +1,26 @@
+az mysql server create --resource-group myResourceGroup --name processmaker3t1 --location "East US" --admin-user adminuser --admin-password My5up3rStr0ngPaSw0rd! --sku-name B_Gen5_1 --version 8.0
+
+docker build -f Dockerfile -t tienphan.azurecr.io/processmaker3t1-image .
+docker push tienphan.azurecr.io/processmaker3t1-image:latest
+
+## Multi Container
+
+az appservice plan create --name myAppServicePlan --resource-group myResourceGroup --sku S1 --is-linux
+
+az webapp create --resource-group myResourceGroup --plan myAppServicePlan --name processmaker3t1 --multicontainer-config-type compose --multicontainer-config-file docker-compose.yml
+
+Docker Compose
+
+docker compose up --file docker-compose.production.yml
+
+## Build an image
+docker build -f Dockerfile.ubuntu -t ubuntu .
+docker run -dip80:80 ubuntu
+
+docker tag processmaker3-image1 tienphan.azurecr.io/processmaker3-image1:latest
+
+
+## Run in container
+
+service nginx start
+service php8.1-fpm start

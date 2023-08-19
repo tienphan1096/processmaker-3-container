@@ -605,7 +605,7 @@ class TemplatePower extends TemplatePowerParser
     public function newBlock($blockname)
     {
         $parent = &$this->content[$this->parent[$blockname] . '_' . $this->index[$this->parent[$blockname]]];
-        $lastitem = sizeof($parent);
+        $lastitem = $parent === null ? 0 : sizeof($parent);
         $lastitem > 1 ? $lastitem-- : $lastitem = 0;
         $ind_blockname = $blockname . '_' . $this->index[$blockname];
         if (!isset($parent[$lastitem]["_B:$blockname"])) {

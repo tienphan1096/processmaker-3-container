@@ -1,0 +1,17 @@
+version: "3.9"
+services:
+  web:
+    depends_on:
+      - mysql
+    build: .
+    ports:
+      - "80:80"
+    volumes:
+      - .:/opt/processmaker
+    tty: true
+  mysql:
+    image: mysql:8.0.32-debian
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: password 
